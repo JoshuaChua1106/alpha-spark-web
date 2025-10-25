@@ -56,6 +56,24 @@
             color: #666;
         }
 
+        .messages-btn {
+            padding: 8px 16px;
+            background: #667eea;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .messages-btn:hover {
+            background: #5568d3;
+        }
+
         .logout-btn {
             padding: 8px 16px;
             background: #f0f2f5;
@@ -185,6 +203,30 @@
             color: #444;
             line-height: 1.6;
             font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .response-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .send-message-btn {
+            padding: 6px 14px;
+            background: white;
+            border: 1.5px solid #667eea;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .send-message-btn:hover {
+            background: #667eea;
+            color: white;
         }
 
         .loading {
@@ -238,6 +280,7 @@
                 <div class="user-name" id="navUserName">Loading...</div>
                 <div class="user-id" id="navUserId"></div>
             </div>
+            <a href="/messages" class="messages-btn">Messages</a>
             <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
     </nav>
@@ -331,6 +374,9 @@
                 const date = new Date(response.createdAt);
                 const timeAgo = getTimeAgo(date);
 
+                // Don't show Send Message button for current user's own response
+                const isOwnResponse = response.userId === currentUser.id;
+
                 return `
                     <div class="response-card">
                         <div class="response-header">
@@ -338,6 +384,13 @@
                             <div class="response-time">${timeAgo}</div>
                         </div>
                         <div class="response-text">${escapeHtml(response.response)}</div>
+                        ${!isOwnResponse ? `
+                            <div class="response-actions">
+                                <button class="send-message-btn" onclick="sendMessageRequest('${response.userId}', '${escapeHtml(response.userName)}')">
+                                    Send Message
+                                </button>
+                            </div>
+                        ` : ''}
                     </div>
                 `;
             }).join('');
@@ -379,6 +432,33 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        async function sendMessageRequest(toUserId, toUserName) {
+            if (!confirm(`Send a message request to ${toUserName}?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/message-request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ toUserId })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Message request sent! They will need to accept before you can chat.');
+                } else {
+                    alert(data.message || 'Failed to send message request');
+                }
+            } catch (error) {
+                console.error('Error sending message request:', error);
+                alert('Error sending message request. Please try again.');
+            }
         }
 
         async function logout() {

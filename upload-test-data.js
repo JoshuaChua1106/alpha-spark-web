@@ -106,16 +106,26 @@ async function uploadAllData() {
       true
     );
 
-    // Upload conversations (if needed for future features)
-    // Note: conversations.json has a different structure, so we'll skip it for now
-    // You can uncomment this if you want to upload conversations
-    /*
+    // Upload message requests
     await uploadCollection(
-      'conversations',
-      path.join(__dirname, 'test data', 'conversations.json'),
-      false
+      'message_requests',
+      path.join(__dirname, 'test data', 'message_requests.json'),
+      true
     );
-    */
+
+    // Upload private conversations
+    await uploadCollection(
+      'private_conversations',
+      path.join(__dirname, 'test data', 'private_conversations.json'),
+      true
+    );
+
+    // Upload private messages
+    await uploadCollection(
+      'private_messages',
+      path.join(__dirname, 'test data', 'private_messages.json'),
+      true
+    );
 
     console.log('\n=================================================');
     console.log('✓ All data uploaded successfully!');

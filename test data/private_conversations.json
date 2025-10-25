@@ -1,0 +1,26 @@
+[
+  {
+    "id": "conv-user-001-user-002",
+    "participants": ["user-001", "user-002"],
+    "participantNames": {
+      "user-001": "John Doe",
+      "user-002": "Jane Smith"
+    },
+    "lastMessage": "Sounds great! See you then.",
+    "lastMessageAt": "2024-10-25T14:30:00Z",
+    "lastMessageBy": "user-002",
+    "createdAt": "2024-10-23T12:30:00Z"
+  },
+  {
+    "id": "conv-user-004-user-005",
+    "participants": ["user-004", "user-005"],
+    "participantNames": {
+      "user-004": "Sarah Williams",
+      "user-005": "David Brown"
+    },
+    "lastMessage": "See you at the meeting!",
+    "lastMessageAt": "2024-10-25T11:00:00Z",
+    "lastMessageBy": "user-005",
+    "createdAt": "2024-10-22T09:15:00Z"
+  }
+]

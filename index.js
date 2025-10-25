@@ -77,6 +77,11 @@ app.get('/dashboard', requireAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 
+// Messages page (protected)
+app.get('/messages', requireAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'messages.html'));
+});
+
 // Login API endpoint
 app.post('/api/login', async (req, res) => {
   try {
@@ -310,6 +315,345 @@ app.get('/api/comments/:questionId', requireAuth, async (req, res) => {
     res.json({
       success: false,
       message: 'Error fetching comments',
+      error: error.message
+    });
+  }
+});
+
+// Send a message request
+app.post('/api/message-request', requireAuth, async (req, res) => {
+  try {
+    const { toUserId } = req.body;
+    const fromUserId = req.session.user.id;
+
+    if (!toUserId) {
+      return res.json({
+        success: false,
+        message: 'Recipient user ID is required'
+      });
+    }
+
+    if (toUserId === fromUserId) {
+      return res.json({
+        success: false,
+        message: 'Cannot send message to yourself'
+      });
+    }
+
+    // Check if request already exists
+    const existingRequestSnapshot = await db.collection('message_requests')
+      .where('fromUserId', '==', fromUserId)
+      .where('toUserId', '==', toUserId)
+      .get();
+
+    if (!existingRequestSnapshot.empty) {
+      return res.json({
+        success: false,
+        message: 'Message request already sent'
+      });
+    }
+
+    // Get recipient user info
+    const toUserDoc = await db.collection('users').doc(toUserId).get();
+    if (!toUserDoc.exists) {
+      return res.json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    const toUserData = toUserDoc.data();
+
+    // Create message request
+    const requestData = {
+      fromUserId: fromUserId,
+      fromUserName: req.session.user.displayName,
+      toUserId: toUserId,
+      toUserName: toUserData.displayName,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      respondedAt: null
+    };
+
+    const docRef = await db.collection('message_requests').add(requestData);
+
+    res.json({
+      success: true,
+      message: 'Message request sent',
+      requestId: docRef.id
+    });
+  } catch (error) {
+    console.error('Error sending message request:', error);
+    res.json({
+      success: false,
+      message: 'Error sending message request',
+      error: error.message
+    });
+  }
+});
+
+// Get pending message requests for current user
+app.get('/api/message-requests', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+
+    const requestsSnapshot = await db.collection('message_requests')
+      .where('toUserId', '==', userId)
+      .where('status', '==', 'pending')
+      .get();
+
+    const requests = [];
+    requestsSnapshot.forEach(doc => {
+      requests.push({ id: doc.id, ...doc.data() });
+    });
+
+    // Sort by createdAt descending
+    requests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    res.json({
+      success: true,
+      requests: requests
+    });
+  } catch (error) {
+    console.error('Error fetching message requests:', error);
+    res.json({
+      success: false,
+      message: 'Error fetching message requests',
+      error: error.message
+    });
+  }
+});
+
+// Accept or decline a message request
+app.post('/api/message-request/:requestId/:action', requireAuth, async (req, res) => {
+  try {
+    const { requestId, action } = req.params;
+    const userId = req.session.user.id;
+
+    if (!['accept', 'decline'].includes(action)) {
+      return res.json({
+        success: false,
+        message: 'Invalid action. Use accept or decline'
+      });
+    }
+
+    // Get the request
+    const requestDoc = await db.collection('message_requests').doc(requestId).get();
+    if (!requestDoc.exists) {
+      return res.json({
+        success: false,
+        message: 'Message request not found'
+      });
+    }
+
+    const requestData = requestDoc.data();
+
+    // Verify the current user is the recipient
+    if (requestData.toUserId !== userId) {
+      return res.json({
+        success: false,
+        message: 'Unauthorized'
+      });
+    }
+
+    // Update request status
+    await db.collection('message_requests').doc(requestId).update({
+      status: action === 'accept' ? 'accepted' : 'declined',
+      respondedAt: new Date().toISOString()
+    });
+
+    // If accepted, create a conversation
+    if (action === 'accept') {
+      const conversationId = `conv-user-${requestData.fromUserId}-${requestData.toUserId}`;
+
+      await db.collection('private_conversations').doc(conversationId).set({
+        participants: [requestData.fromUserId, requestData.toUserId],
+        participantNames: {
+          [requestData.fromUserId]: requestData.fromUserName,
+          [requestData.toUserId]: requestData.toUserName
+        },
+        lastMessage: '',
+        lastMessageAt: new Date().toISOString(),
+        lastMessageBy: null,
+        createdAt: new Date().toISOString()
+      });
+    }
+
+    res.json({
+      success: true,
+      message: action === 'accept' ? 'Message request accepted' : 'Message request declined'
+    });
+  } catch (error) {
+    console.error('Error responding to message request:', error);
+    res.json({
+      success: false,
+      message: 'Error responding to message request',
+      error: error.message
+    });
+  }
+});
+
+// Get conversations for current user
+app.get('/api/conversations', requireAuth, async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+
+    const conversationsSnapshot = await db.collection('private_conversations')
+      .where('participants', 'array-contains', userId)
+      .get();
+
+    const conversations = [];
+    conversationsSnapshot.forEach(doc => {
+      conversations.push({ id: doc.id, ...doc.data() });
+    });
+
+    // Sort by lastMessageAt descending
+    conversations.sort((a, b) => new Date(b.lastMessageAt) - new Date(a.lastMessageAt));
+
+    res.json({
+      success: true,
+      conversations: conversations
+    });
+  } catch (error) {
+    console.error('Error fetching conversations:', error);
+    res.json({
+      success: false,
+      message: 'Error fetching conversations',
+      error: error.message
+    });
+  }
+});
+
+// Get messages for a conversation
+app.get('/api/messages/:conversationId', requireAuth, async (req, res) => {
+  try {
+    const { conversationId } = req.params;
+    const userId = req.session.user.id;
+
+    // Verify user is part of the conversation
+    const conversationDoc = await db.collection('private_conversations').doc(conversationId).get();
+    if (!conversationDoc.exists) {
+      return res.json({
+        success: false,
+        message: 'Conversation not found'
+      });
+    }
+
+    const conversationData = conversationDoc.data();
+    if (!conversationData.participants.includes(userId)) {
+      return res.json({
+        success: false,
+        message: 'Unauthorized'
+      });
+    }
+
+    // Get messages
+    const messagesSnapshot = await db.collection('private_messages')
+      .where('conversationId', '==', conversationId)
+      .get();
+
+    const messages = [];
+    messagesSnapshot.forEach(doc => {
+      messages.push({ id: doc.id, ...doc.data() });
+    });
+
+    // Sort by createdAt ascending
+    messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+    // Mark messages as read
+    const batch = db.batch();
+    messages.forEach(message => {
+      if (message.receiverId === userId && !message.isRead) {
+        const messageRef = db.collection('private_messages').doc(message.id);
+        batch.update(messageRef, {
+          isRead: true,
+          readAt: new Date().toISOString()
+        });
+      }
+    });
+    await batch.commit();
+
+    res.json({
+      success: true,
+      messages: messages,
+      conversation: conversationData
+    });
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.json({
+      success: false,
+      message: 'Error fetching messages',
+      error: error.message
+    });
+  }
+});
+
+// Send a message
+app.post('/api/messages/:conversationId', requireAuth, async (req, res) => {
+  try {
+    const { conversationId } = req.params;
+    const { content } = req.body;
+    const userId = req.session.user.id;
+
+    if (!content || content.trim() === '') {
+      return res.json({
+        success: false,
+        message: 'Message content is required'
+      });
+    }
+
+    // Verify user is part of the conversation
+    const conversationDoc = await db.collection('private_conversations').doc(conversationId).get();
+    if (!conversationDoc.exists) {
+      return res.json({
+        success: false,
+        message: 'Conversation not found'
+      });
+    }
+
+    const conversationData = conversationDoc.data();
+    if (!conversationData.participants.includes(userId)) {
+      return res.json({
+        success: false,
+        message: 'Unauthorized'
+      });
+    }
+
+    // Get receiver ID
+    const receiverId = conversationData.participants.find(id => id !== userId);
+
+    // Create message
+    const messageData = {
+      conversationId: conversationId,
+      senderId: userId,
+      senderName: req.session.user.displayName,
+      receiverId: receiverId,
+      content: content.trim(),
+      createdAt: new Date().toISOString(),
+      isRead: false,
+      readAt: null
+    };
+
+    const docRef = await db.collection('private_messages').add(messageData);
+
+    // Update conversation
+    await db.collection('private_conversations').doc(conversationId).update({
+      lastMessage: content.trim(),
+      lastMessageAt: new Date().toISOString(),
+      lastMessageBy: userId
+    });
+
+    res.json({
+      success: true,
+      message: 'Message sent',
+      messageId: docRef.id,
+      messageData: { id: docRef.id, ...messageData }
+    });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    res.json({
+      success: false,
+      message: 'Error sending message',
       error: error.message
     });
   }
