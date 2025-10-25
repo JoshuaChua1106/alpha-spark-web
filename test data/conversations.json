@@ -1,0 +1,136 @@
+{
+  "conv-user001-user002": {
+    "conversation": {
+      "id": "conv-user001-user002",
+      "groupId": "alpha-group-001",
+      "participants": ["user-001", "user-002"],
+      "participantNames": {
+        "user-001": "John Doe",
+        "user-002": "Jane Smith"
+      },
+      "createdAt": "2024-10-23T13:00:00Z",
+      "lastMessageAt": "2024-10-25T10:45:00Z",
+      "lastMessageText": "Thanks! Looking forward to it.",
+      "lastMessageBy": "user-002"
+    },
+    "messages": [
+      {
+        "id": "msg-001",
+        "conversationId": "conv-user001-user002",
+        "senderId": "user-001",
+        "senderName": "John Doe",
+        "content": "Hi Jane! I really appreciated your comment on the question today.",
+        "createdAt": "2024-10-23T13:00:00Z",
+        "isRead": true,
+        "readAt": "2024-10-23T13:05:00Z"
+      },
+      {
+        "id": "msg-002",
+        "conversationId": "conv-user001-user002",
+        "senderId": "user-002",
+        "senderName": "Jane Smith",
+        "content": "Thank you, John! Your response was encouraging too. It's great to have this community.",
+        "createdAt": "2024-10-23T13:10:00Z",
+        "isRead": true,
+        "readAt": "2024-10-23T13:15:00Z"
+      },
+      {
+        "id": "msg-003",
+        "conversationId": "conv-user001-user002",
+        "senderId": "user-001",
+        "senderName": "John Doe",
+        "content": "Absolutely! Are you coming to the group meeting this Wednesday?",
+        "createdAt": "2024-10-24T09:30:00Z",
+        "isRead": true,
+        "readAt": "2024-10-24T10:00:00Z"
+      },
+      {
+        "id": "msg-004",
+        "conversationId": "conv-user001-user002",
+        "senderId": "user-002",
+        "senderName": "Jane Smith",
+        "content": "Yes, I'll be there! Can't wait to discuss this week's topic.",
+        "createdAt": "2024-10-24T10:15:00Z",
+        "isRead": true,
+        "readAt": "2024-10-24T11:00:00Z"
+      },
+      {
+        "id": "msg-005",
+        "conversationId": "conv-user001-user002",
+        "senderId": "user-002",
+        "senderName": "Jane Smith",
+        "content": "Thanks! Looking forward to it.",
+        "createdAt": "2024-10-25T10:45:00Z",
+        "isRead": false,
+        "readAt": null
+      }
+    ]
+  },
+  "conv-user004-user005": {
+    "conversation": {
+      "id": "conv-user004-user005",
+      "groupId": "alpha-group-002",
+      "participants": ["user-004", "user-005"],
+      "participantNames": {
+        "user-004": "Sarah Williams",
+        "user-005": "David Brown"
+      },
+      "createdAt": "2024-10-22T10:30:00Z",
+      "lastMessageAt": "2024-10-25T09:20:00Z",
+      "lastMessageText": "See you Thursday!",
+      "lastMessageBy": "user-005"
+    },
+    "messages": [
+      {
+        "id": "msg-006",
+        "conversationId": "conv-user004-user005",
+        "senderId": "user-004",
+        "senderName": "Sarah Williams",
+        "content": "Hey David! Your comment really resonated with me. The accountability aspect is so important.",
+        "createdAt": "2024-10-22T17:00:00Z",
+        "isRead": true,
+        "readAt": "2024-10-22T17:30:00Z"
+      },
+      {
+        "id": "msg-007",
+        "conversationId": "conv-user004-user005",
+        "senderId": "user-005",
+        "senderName": "David Brown",
+        "content": "Thanks Sarah! I think that's one of the best parts of being in this group.",
+        "createdAt": "2024-10-22T18:00:00Z",
+        "isRead": true,
+        "readAt": "2024-10-22T19:00:00Z"
+      },
+      {
+        "id": "msg-008",
+        "conversationId": "conv-user004-user005",
+        "senderId": "user-004",
+        "senderName": "Sarah Williams",
+        "content": "Are you planning to attend the Thursday meeting?",
+        "createdAt": "2024-10-25T08:00:00Z",
+        "isRead": true,
+        "readAt": "2024-10-25T08:30:00Z"
+      },
+      {
+        "id": "msg-009",
+        "conversationId": "conv-user004-user005",
+        "senderId": "user-005",
+        "senderName": "David Brown",
+        "content": "Definitely! Wouldn't miss it.",
+        "createdAt": "2024-10-25T09:00:00Z",
+        "isRead": true,
+        "readAt": "2024-10-25T09:10:00Z"
+      },
+      {
+        "id": "msg-010",
+        "conversationId": "conv-user004-user005",
+        "senderId": "user-005",
+        "senderName": "David Brown",
+        "content": "See you Thursday!",
+        "createdAt": "2024-10-25T09:20:00Z",
+        "isRead": false,
+        "readAt": null
+      }
+    ]
+  }
+}

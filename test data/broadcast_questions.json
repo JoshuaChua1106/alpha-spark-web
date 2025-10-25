@@ -1,0 +1,29 @@
+[
+  {
+    "id": "question-2024-w43",
+    "question": "What does community mean to you?",
+    "description": "Reflect on your experiences with community and how it has shaped your faith journey. Think about the people who have supported you and how you've supported others.",
+    "createdAt": "2024-10-21T00:00:00Z",
+    "expiresAt": "2024-10-28T23:59:59Z",
+    "isActive": true,
+    "createdBy": "admin-001"
+  },
+  {
+    "id": "question-2024-w42",
+    "question": "How has your faith grown recently?",
+    "description": "Share a recent experience where you felt your faith deepen or a moment where you saw God working in your life.",
+    "createdAt": "2024-10-14T00:00:00Z",
+    "expiresAt": "2024-10-21T23:59:59Z",
+    "isActive": false,
+    "createdBy": "admin-001"
+  },
+  {
+    "id": "question-2024-w41",
+    "question": "What are you grateful for this week?",
+    "description": "Take a moment to reflect on the blessings in your life, big or small. How can gratitude transform your perspective?",
+    "createdAt": "2024-10-07T00:00:00Z",
+    "expiresAt": "2024-10-14T23:59:59Z",
+    "isActive": false,
+    "createdBy": "admin-001"
+  }
+]

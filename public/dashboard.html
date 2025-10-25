@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AlphaSpark</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: white;
+            padding: 16px 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .user-id {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: #f0f2f5;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: #e4e6eb;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .question-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .question-header {
+            margin-bottom: 20px;
+        }
+
+        .question-label {
+            font-size: 0.85rem;
+            color: #667eea;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .question-description {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .responses-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .responses-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f0f2f5;
+        }
+
+        .responses-title {
+            font-size: 1.3rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .response-count {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .responses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .response-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.2s;
+        }
+
+        .response-card:hover {
+            background: #f0f2f5;
+            transform: translateX(4px);
+        }
+
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .response-author {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .response-time {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .response-text {
+            color: #444;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-responses {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .no-responses-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            opacity: 0.3;
+        }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">AlphaSpark</div>
+        <div class="navbar-user">
+            <div class="user-info">
+                <div class="user-name" id="navUserName">Loading...</div>
+                <div class="user-id" id="navUserId"></div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="content" class="loading">
+            <div class="spinner"></div>
+            <p>Loading your dashboard...</p>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let currentQuestion = null;
+
+        // Load user data and dashboard content
+        async function loadDashboard() {
+            try {
+                // Get current user
+                const userResponse = await fetch('/api/user');
+                const userData = await userResponse.json();
+
+                if (!userData.success) {
+                    window.location.href = '/login';
+                    return;
+                }
+
+                currentUser = userData.user;
+
+                // Update navbar
+                document.getElementById('navUserName').textContent = currentUser.displayName;
+                document.getElementById('navUserId').textContent = currentUser.id;
+
+                // Get current question
+                const questionResponse = await fetch('/api/question');
+                const questionData = await questionResponse.json();
+
+                if (!questionData.success) {
+                    showError('Unable to load question. Please try again later.');
+                    return;
+                }
+
+                currentQuestion = questionData.question;
+
+                // Get responses for this question
+                const responsesResponse = await fetch(`/api/responses/${currentQuestion.id}`);
+                const responsesData = await responsesResponse.json();
+
+                if (!responsesData.success) {
+                    showError('Unable to load responses. Please try again later.');
+                    return;
+                }
+
+                // Display everything
+                displayDashboard(currentQuestion, responsesData.responses);
+
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showError('An error occurred while loading the dashboard.');
+            }
+        }
+
+        function displayDashboard(question, responses) {
+            const content = document.getElementById('content');
+            content.className = '';
+
+            content.innerHTML = `
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-label">This Week's Question</div>
+                        <div class="question-text">${escapeHtml(question.question)}</div>
+                        <div class="question-description">${escapeHtml(question.description)}</div>
+                    </div>
+                </div>
+
+                <div class="responses-section">
+                    <div class="responses-header">
+                        <div class="responses-title">Group Responses</div>
+                        <div class="response-count">${responses.length} ${responses.length === 1 ? 'response' : 'responses'}</div>
+                    </div>
+
+                    <div class="responses-list" id="responsesList">
+                        ${responses.length > 0 ? renderResponses(responses) : renderNoResponses()}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderResponses(responses) {
+            return responses.map(response => {
+                const date = new Date(response.createdAt);
+                const timeAgo = getTimeAgo(date);
+
+                return `
+                    <div class="response-card">
+                        <div class="response-header">
+                            <div class="response-author">${escapeHtml(response.userName)}</div>
+                            <div class="response-time">${timeAgo}</div>
+                        </div>
+                        <div class="response-text">${escapeHtml(response.response)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderNoResponses() {
+            return `
+                <div class="no-responses">
+                    <div class="no-responses-icon">💭</div>
+                    <p>No responses yet from your group.</p>
+                    <p style="font-size: 0.9rem; margin-top: 8px;">Be the first to share your thoughts!</p>
+                </div>
+            `;
+        }
+
+        function showError(message) {
+            const content = document.getElementById('content');
+            content.className = '';
+            content.innerHTML = `
+                <div class="error-message">
+                    <strong>Error:</strong> ${escapeHtml(message)}
+                </div>
+            `;
+        }
+
+        function getTimeAgo(date) {
+            const now = new Date();
+            const seconds = Math.floor((now - date) / 1000);
+
+            if (seconds < 60) return 'just now';
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+            if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+
+            return date.toLocaleDateString();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    window.location.href = '/login';
+                } else {
+                    alert('Logout failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('Logout failed. Please try again.');
+            }
+        }
+
+        // Load dashboard when page loads
+        loadDashboard();
+    </script>
+</body>
+</html>

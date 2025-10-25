@@ -1,0 +1,52 @@
+[
+  {
+    "id": "user-001",
+    "email": "john.doe@alphaspark.com",
+    "displayName": "John Doe",
+    "profileImageUrl": null,
+    "groupId": "alpha-group-001",
+    "createdAt": "2024-10-01T10:00:00Z",
+    "lastLoginAt": "2024-10-25T14:30:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-002",
+    "email": "jane.smith@alphaspark.com",
+    "displayName": "Jane Smith",
+    "profileImageUrl": null,
+    "groupId": "alpha-group-001",
+    "createdAt": "2024-10-02T09:15:00Z",
+    "lastLoginAt": "2024-10-25T13:45:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-003",
+    "email": "michael.johnson@alphaspark.com",
+    "displayName": "Michael Johnson",
+    "profileImageUrl": null,
+    "groupId": "alpha-group-001",
+    "createdAt": "2024-10-03T11:30:00Z",
+    "lastLoginAt": "2024-10-24T16:20:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-004",
+    "email": "sarah.williams@alphaspark.com",
+    "displayName": "Sarah Williams",
+    "profileImageUrl": null,
+    "groupId": "alpha-group-002",
+    "createdAt": "2024-10-04T08:45:00Z",
+    "lastLoginAt": "2024-10-25T12:00:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-005",
+    "email": "david.brown@alphaspark.com",
+    "displayName": "David Brown",
+    "profileImageUrl": null,
+    "groupId": "alpha-group-002",
+    "createdAt": "2024-10-05T14:00:00Z",
+    "lastLoginAt": "2024-10-25T15:10:00Z",
+    "isActive": true
+  }
+]

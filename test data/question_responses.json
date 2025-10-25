@@ -1,0 +1,82 @@
+[
+  {
+    "id": "resp-001",
+    "questionId": "question-2024-w43",
+    "userId": "user-001",
+    "userName": "John Doe",
+    "groupId": "alpha-group-001",
+    "response": "Community means having people who walk alongside you in faith, celebrating victories and supporting each other through challenges. It's where I've found accountability and genuine friendships.",
+    "createdAt": "2024-10-21T14:30:00Z",
+    "updatedAt": "2024-10-21T14:30:00Z"
+  },
+  {
+    "id": "resp-002",
+    "questionId": "question-2024-w43",
+    "userId": "user-002",
+    "userName": "Jane Smith",
+    "groupId": "alpha-group-001",
+    "response": "To me, community is a safe space where I can be vulnerable about my struggles and questions. Our Alpha group has shown me what it means to truly belong and be accepted.",
+    "createdAt": "2024-10-22T09:15:00Z",
+    "updatedAt": "2024-10-22T09:15:00Z"
+  },
+  {
+    "id": "resp-003",
+    "questionId": "question-2024-w43",
+    "userId": "user-003",
+    "userName": "Michael Johnson",
+    "groupId": "alpha-group-001",
+    "response": "Community has been transformative for me. It's not just about Sunday gatherings, but the everyday moments of encouragement, prayer, and shared life. I'm grateful for each person in our group.",
+    "createdAt": "2024-10-23T11:00:00Z",
+    "updatedAt": "2024-10-23T11:00:00Z"
+  },
+  {
+    "id": "resp-004",
+    "questionId": "question-2024-w43",
+    "userId": "user-004",
+    "userName": "Sarah Williams",
+    "groupId": "alpha-group-002",
+    "response": "Community means never having to face life's challenges alone. Through this group, I've discovered that we're stronger together and that our diverse perspectives enrich everyone's faith journey.",
+    "createdAt": "2024-10-21T16:45:00Z",
+    "updatedAt": "2024-10-21T16:45:00Z"
+  },
+  {
+    "id": "resp-005",
+    "questionId": "question-2024-w43",
+    "userId": "user-005",
+    "userName": "David Brown",
+    "groupId": "alpha-group-002",
+    "response": "For me, community is where iron sharpens iron. I've grown so much through the honest conversations and mutual accountability in our group. It's a blessing to do life together.",
+    "createdAt": "2024-10-22T13:20:00Z",
+    "updatedAt": "2024-10-22T13:20:00Z"
+  },
+  {
+    "id": "resp-006",
+    "questionId": "question-2024-w42",
+    "userId": "user-001",
+    "userName": "John Doe",
+    "groupId": "alpha-group-001",
+    "response": "Recently, I've seen God's provision in unexpected ways. Lost my job last month but found a better opportunity within two weeks. It deepened my trust in His timing.",
+    "createdAt": "2024-10-15T10:00:00Z",
+    "updatedAt": "2024-10-15T10:00:00Z"
+  },
+  {
+    "id": "resp-007",
+    "questionId": "question-2024-w42",
+    "userId": "user-002",
+    "userName": "Jane Smith",
+    "groupId": "alpha-group-001",
+    "response": "My faith has grown through serving others. Volunteering at the food bank opened my eyes to how blessed I am and how God works through us to help others.",
+    "createdAt": "2024-10-16T12:30:00Z",
+    "updatedAt": "2024-10-16T12:30:00Z"
+  },
+  {
+    "id": "resp-008",
+    "questionId": "question-2024-w41",
+    "userId": "user-001",
+    "userName": "John Doe",
+    "groupId": "alpha-group-001",
+    "response": "Grateful for my family's health, the support of this community, and the simple joy of morning coffee. These small blessings remind me of God's constant care.",
+    "createdAt": "2024-10-08T08:00:00Z",
+    "updatedAt": "2024-10-08T08:00:00Z"
+  }
+]

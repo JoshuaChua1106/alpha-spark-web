@@ -1,0 +1,18 @@
+[
+  {
+    "id": "alpha-group-001",
+    "name": "Alpha Group 001",
+    "description": "Downtown Community Alpha Group - Meeting every Wednesday evening",
+    "createdAt": "2024-09-15T09:00:00Z",
+    "memberCount": 3,
+    "isActive": true
+  },
+  {
+    "id": "alpha-group-002",
+    "name": "Alpha Group 002",
+    "description": "North Campus Alpha Group - Meeting every Thursday evening",
+    "createdAt": "2024-09-20T10:00:00Z",
+    "memberCount": 2,
+    "isActive": true
+  }
+]
