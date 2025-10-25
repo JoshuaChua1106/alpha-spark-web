@@ -22,6 +22,34 @@ try {
 
 const db = admin.firestore();
 
+// Function to clear all documents from a Firestore collection
+async function clearCollection(collectionName) {
+  try {
+    console.log(`Clearing ${collectionName}...`);
+
+    const snapshot = await db.collection(collectionName).get();
+
+    if (snapshot.empty) {
+      console.log(`✓ ${collectionName} is already empty`);
+      return;
+    }
+
+    const batch = db.batch();
+    let count = 0;
+
+    snapshot.docs.forEach((doc) => {
+      batch.delete(doc.ref);
+      count++;
+    });
+
+    await batch.commit();
+    console.log(`✓ Cleared ${count} documents from ${collectionName}`);
+
+  } catch (error) {
+    console.error(`✗ Error clearing ${collectionName}:`, error.message);
+  }
+}
+
 // Function to upload data from a JSON file to a Firestore collection
 async function uploadCollection(collectionName, filePath, useIdAsDocId = true) {
   try {
@@ -105,6 +133,13 @@ async function uploadAllData() {
       path.join(__dirname, 'test data', 'response_comments.json'),
       true
     );
+
+    // Clear private messaging data (for demo reset)
+    console.log('\n--- Resetting Private Messaging Data ---');
+    await clearCollection('message_requests');
+    await clearCollection('private_conversations');
+    await clearCollection('private_messages');
+    console.log('--- Private Messaging Data Reset Complete ---\n');
 
     // Upload message requests
     await uploadCollection(
